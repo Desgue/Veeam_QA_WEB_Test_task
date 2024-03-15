@@ -1,4 +1,4 @@
-from selenium import webdriver
+""" from selenium import webdriver
 from selenium.webdriver.chrome.service import  Service
 from selenium.webdriver.common.by import  By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -6,13 +6,24 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 
+COUNTRY_TOGGLER_IDX = 0
+CITY_TOGGLER_IDX = 1
+DEPARTMENT_SCROLLAREA_IDX = 0
+COUNTRY_SCROLLAREA_IDX = 1
+CITY_SCROLLAREA_IDX = 2
+
+USA_STATE_TOGGLER_IDX = 1
+USA_CITY_TOGGLER_IDX = 2
+USA_STATE_SCROLLAREA_IDX = 2
+USA_CITY_SCROLLAREA_IDC = 3
+
 
 def New_Driver():
     service = Service(executable_path =  'chromedriver.exe')
     driver = webdriver.Chrome(service = service)
     driver.get('https://careers.veeam.com/vacancies ')
     driver.maximize_window()
-    
+    driver.implicitly_wait(2)
     return driver
 
 # GET SCROLLABLE AREA AFTER CLICKING A TOGGLER
@@ -30,7 +41,7 @@ def Click_Department_Toggler(driver):
 
 def Select_Department(driver, department_name):
     Click_Department_Toggler(driver)
-    area = Get_Scroll_Area(driver)[0]
+    area = Get_Scroll_Area(driver)[DEPARTMENT_SCROLLAREA_IDX]
 
     for i in range(10):
         driver.execute_script("arguments[0].scrollBy(0,50);", area) 
@@ -40,10 +51,9 @@ def Select_Department(driver, department_name):
             break
         except Exception as e:
             continue
-        driver.implicitly_wait(2)
 
 
-# City and country toggler have both the same ID of 'city-toggler'
+# City, country and State toggler have all the same ID of 'city-toggler'
 def Get_City_Togglers(driver):
     # 0 = Country, 1 = City or State,  2 = City if State is selected
     toggler = driver.find_elements(By.XPATH, '//*[@id="city-toggler"]')
@@ -58,31 +68,30 @@ def Get_City_Togglers(driver):
 # SELECT COUNTRY
 
 def Select_Country(driver, country_name):
-    country_toggler = Get_City_Togglers(driver)[0]
+    country_toggler = Get_City_Togglers(driver)[COUNTRY_TOGGLER_IDX]
     country_toggler.click()
 
 
-    area = Get_Scroll_Area(driver)[1]
+    area = Get_Scroll_Area(driver)[COUNTRY_SCROLLAREA_IDX]
     for i in range(10):
-        driver.execute_script("arguments[0].scrollBy(0,100);", area) 
+        driver.execute_script("arguments[0].scrollBy(0,200);", area) 
         try:    
             department = driver.find_element(By.LINK_TEXT, country_name)
             department.click()
             break
         except Exception as e:
             continue
-        driver.implicitly_wait(2)
 
 
 # SELECT STATE IF COUNTRY IS USA
 def Select_State(driver, state_name):
-    state_toggler = Get_City_Togglers(driver)[1]
+    state_toggler = Get_City_Togglers(driver)[USA_STATE_TOGGLER_IDX]
     state_toggler.click()
 
     area = Get_Scroll_Area(driver)
 
     for i in range(10):
-        driver.execute_script("arguments[0].scrollBy(0,100);", area[2]) 
+        driver.execute_script("arguments[0].scrollBy(0,200);", area[2]) 
         try:    
             state = driver.find_element(By.LINK_TEXT, state_name)
             state.click()
@@ -95,11 +104,11 @@ def Select_State(driver, state_name):
 
 def Select_City(driver, city_name, is_usa = False):
     if is_usa:
-        city_idx = 2
-        area_idx = 3
+        city_idx = USA_CITY_TOGGLER_IDX
+        area_idx = USA_CITY_SCROLLAREA_IDC
     else:
-        city_idx = 1
-        area_idx = 2
+        city_idx = CITY_TOGGLER_IDX
+        area_idx = CITY_SCROLLAREA_IDX
 
     city_toggler = Get_City_Togglers(driver)[city_idx]
     city_toggler.click()
@@ -107,7 +116,7 @@ def Select_City(driver, city_name, is_usa = False):
     area = Get_Scroll_Area(driver)
 
     for i in range(10):
-        driver.execute_script("arguments[0].scrollBy(0,100);", area[area_idx]) 
+        driver.execute_script("arguments[0].scrollBy(0,200);", area[area_idx]) 
         try:    
             department = driver.find_element(By.LINK_TEXT, city_name)
             department.click()
@@ -136,20 +145,16 @@ def Scroll_Main_Body(driver):
 # 1 CARD IS APPARENTLY HIDDEN ALWAYS
 # REQUIREMENT IS TO MAXIMAZE THE SCREEN SO FOCUS ON THAT DISPLAYED CARD
 def Collect_Job_Information(driver):
-    
-
     job_list = driver.find_elements(By.XPATH, '//div[@class="row d-none d-md-block"]/div/div/div[@class="d-none d-lg-block"]/a[@class="card card-md-45 card-no-hover card--shadowed"]')
-    print(len(job_list))
     return
 
 if __name__ == '__main__':
     department = "Sales"
-    country = "Portugal"
-    city = "Lisbon"
+    country = "Romania"
+    city = "Bucharest"
     state = "Texas"
 
     driver = New_Driver()
-
     Select_Department(driver, department)
     Select_Country(driver, country)
     if country == "USA":
@@ -160,7 +165,7 @@ if __name__ == '__main__':
     
     Click_Search_Button(driver)
     Collect_Job_Information(driver)
-    time.sleep(10)
+
     driver.quit()
     pass
 
@@ -184,4 +189,24 @@ if __name__ == '__main__':
 # 2. REFACTOR THE CODE TO MAKE IT MORE READABLE
 # 3. ADD EXCEPTION HANDLING
 # 4. ADD LOGGING
-# 5. TRANSFORM IN CLI TOOL
+# 5. TRANSFORM IN CLI TOOL """
+
+import scraper
+
+if __name__ == '__main__':
+    tester1 = scraper.Tester(
+                            url="https://careers.veeam.com/vacancies",
+                            department="Sales",
+                            country="USA",
+                            state="Texas",
+                            city="Austin",
+                            num_jobs_to_compare=1)
+    tester2 = scraper.Tester(
+                            url="https://careers.veeam.com/vacancies",
+                            department="Sales",
+                            country="Romania",
+                            city="Bucharest",
+                            num_jobs_to_compare=28)  
+
+    tester1.run()
+    tester2.run()
