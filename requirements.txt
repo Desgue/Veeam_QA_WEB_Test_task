@@ -1,0 +1,21 @@
+QA WEB_Test task
+
+Using Selenium WebDriver, please do the following:
+• Open https://careers.veeam.com/vacancies and maximize the browser window. DONE
+
+• Then, using the jobs filter on the page, count the number of Sales positions in two locations:
+- USA, Texas, Austin
+- Romania, Bucharest
+
+• You are expected to count positions by choosing the correct filter settings, pressing search
+button and counting blocks that represent open positions.
+
+• Compare the number of positions with the expected result for each location.
+
+
+Notes:
+It would be a good idea to parametrize the values of input parameters and the expected job
+number so that the code could be used with various parameter sets.
+You can use a browser of your choice.
+
+Please do not use ChatGPT or similar tools.
