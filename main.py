@@ -15,6 +15,14 @@ def New_Driver():
     
     return driver
 
+# GET SCROLLABLE AREA AFTER CLICKING A TOGGLER
+# 0 = Department, 1 = Country, IF COUNTRY USA 2 = STATE 3 = CITY, IF COUNTRY IS NOT USA, 2 = CITY
+def Get_Scroll_Area(driver):
+    scroll_area = driver.find_elements(By.XPATH, '//*[@class="scrollarea area"]')
+    return scroll_area
+
+# HANDLE DEPARTMENT SELECTION
+
 def Click_Department_Toggler(driver):
     toggler = driver.find_element(By.ID, 'department-toggler')
     toggler.click()
@@ -32,9 +40,6 @@ def Select_Department(driver, department_name):
             break
         except Exception as e:
             continue
-        
-
-
 
 
 # City and country toggler have both the same ID of 'city-toggler'
@@ -47,20 +52,22 @@ def Get_City_Togglers(driver):
 # Problem might be visinilty of the element as we are dealing not with a select element but with a div element
 # FIX DEPARTMENT SELECTION WHEN FINDING A SOLUTION FOR COUNTRY SELECTION
 # ELEMENTS ARE ONLY VISIBLE UNTIL COSTA RICA CONFIRMING ASSUMPTION OF VISIBILITY
-def Get_Scroll_Area(driver):
-    scroll_area = driver.find_elements(By.XPATH, '//*[@class="scrollarea area"]')
-    return scroll_area
 
 
 def Select_Country(driver, country_name):
     country_toggler = Get_City_Togglers(driver)[0]
     country_toggler.click()
 
-    wait = WebDriverWait(driver, 5)
-    scroll_area = Get_Scroll_Area(driver)[0]
-    for i in range(60):
-        driver.execute_script("arguments[0].scrollBy(0,500);", scroll_area) 
-        driver.implicitly_wait(2)
+
+    area = Get_Scroll_Area(driver)[1]
+    for i in range(10):
+        driver.execute_script("arguments[0].scrollBy(0,100);", area) 
+        try:    
+            department = driver.find_element(By.LINK_TEXT, country_name)
+            department.click()
+            break
+        except Exception as e:
+            continue
     
     
 
@@ -71,8 +78,13 @@ def Select_Country(driver, country_name):
     
         
 if __name__ == '__main__':
+    department = "Sales"
+    country = "Romania"
+
     driver = New_Driver()
-    Select_Department(driver, "Purchasing")
+    
+    Select_Department(driver, department)
+    Select_Country(driver, country)
 
     time.sleep(5)
     
@@ -95,3 +107,6 @@ if __name__ == '__main__':
 # 11. If the city is visible, click the city
 # 12. If the city is not visible, scroll to the city and click the city
 # 13. Click the search button
+
+# TO DO
+# 1. CHANGE SCROLLAREA SELECTION TO A MORE SPECIFIC SELECTOR
