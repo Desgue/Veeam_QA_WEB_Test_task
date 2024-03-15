@@ -205,12 +205,13 @@ if __name__ == '__main__':
 # 10. Check if the city is visible - DONE
 # 11. If the city is visible, click the city - DONE
 # 12. If the city is not visible, scroll to the city and click the city - DONE
-# 13. Click the search button
+# 13. Click the search button DONE
 
 # TO DO
-# 1. CHANGE SCROLLAREA SELECTION TO A MORE SPECIFIC SELECTOR
-# 2. REFACTOR THE CODE TO MAKE IT MORE READABLE
-# 3. ADD EXCEPTION HANDLING
-# 4. ADD LOGGING
-# 5. TRANSFORM IN CLI TOOL """
+# 1. CHANGE SCROLLAREA SELECTION TO A MORE SPECIFIC SELECTOR TO DO
+# 2. REFACTOR THE CODE TO MAKE IT MORE READABLE DONE
+# 3. ADD EXCEPTION HANDLING TO DO
+# 4. ADD LOGGING TO DO
+# 5. TRANSFORM IN CLI TOOL TO DO 
+# """
 

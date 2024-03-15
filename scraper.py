@@ -163,13 +163,12 @@ class Tester:
         
         self.set_available_jobs_list()
 
-    def compare_jobs(self):
+    def jobs_found_match_expected(self):
         return len(self.job_list) == self.num_jobs_to_compare
     
     def run(self):
         self.scrape()
-        result = self.compare_jobs()
-        if result:
+        if self.jobs_found_match_expected():
             print("Test Passed, the number of jobs displayed is as expected")
             print("Number of jobs displayed: ", len(self.job_list))
             print("Number of jobs expected: ", self.num_jobs_to_compare)
