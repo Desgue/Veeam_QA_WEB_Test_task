@@ -17,7 +17,7 @@ USA_CITY_TOGGLER_IDX = 2
 USA_STATE_SCROLLAREA_IDX = 2
 USA_CITY_SCROLLAREA_IDX = 3
 
-class Tester:
+class Options:
     def __init__(self, url, department, country, city, num_jobs_to_compare, state=None, driver_path = "chromedriver.exe"):
         self.url = url
         self.department = department
@@ -25,7 +25,17 @@ class Tester:
         self.city = city
         self.state = state
         self.num_jobs_to_compare = num_jobs_to_compare
-        self.init_Driver(driver_path)
+        self.driver_path = driver_path
+
+class Tester:
+    def __init__(self, options: Options):
+        self.url = options.url
+        self.department = options.department
+        self.country = options.country
+        self.city = options.city
+        self.state = options.state
+        self.num_jobs_to_compare = options.num_jobs_to_compare
+        self.init_Driver(options.driver_path)
 
     def init_Driver(self, driver_path):
         service = Service(executable_path = driver_path)
