@@ -80,7 +80,7 @@ def Select_State(driver, state_name):
     state_toggler.click()
 
     area = Get_Scroll_Area(driver)
-    print(len(area))
+
     for i in range(10):
         driver.execute_script("arguments[0].scrollBy(0,100);", area[2]) 
         try:    
@@ -105,8 +105,7 @@ def Select_City(driver, city_name, is_usa = False):
     city_toggler.click()
 
     area = Get_Scroll_Area(driver)
-    for a in area:
-        print(a.tag_name)
+
     for i in range(10):
         driver.execute_script("arguments[0].scrollBy(0,100);", area[area_idx]) 
         try:    
@@ -116,11 +115,37 @@ def Select_City(driver, city_name, is_usa = False):
         except Exception as e:
             continue    
 
+# CLICK SEARCH BUTTON
+def Click_Search_Button(driver):
+    search_button = driver.find_element(By.XPATH, "//button[text()='Find a career']")
+    search_button.click()
+    return
+
+
+# SCROLL MAIN BODY
+def Scroll_Main_Body(driver):
+    body = driver.find_element(By.TAG_NAME, 'html')
+
+    for i in range(60):
+        driver.execute_script("arguments[0].scrollBy(0,100);", body)
         
+    return
+
+# 4 HIDDEN JOB CARDS FOR EACH JOB FOUND IN THE SEARCH
+# 3 CARDS ARE DISPLAYED DEPENDING ON THE SIZE OF THE SCREEN
+# 1 CARD IS APPARENTLY HIDDEN ALWAYS
+# REQUIREMENT IS TO MAXIMAZE THE SCREEN SO FOCUS ON THAT DISPLAYED CARD
+def Collect_Job_Information(driver):
+    
+
+    job_list = driver.find_elements(By.XPATH, '//div[@class="row d-none d-md-block"]/div/div/div[@class="d-none d-lg-block"]/a[@class="card card-md-45 card-no-hover card--shadowed"]')
+    print(len(job_list))
+    return
+
 if __name__ == '__main__':
     department = "Sales"
-    country = "USA"
-    city = "Austin"
+    country = "Portugal"
+    city = "Lisbon"
     state = "Texas"
 
     driver = New_Driver()
@@ -133,6 +158,8 @@ if __name__ == '__main__':
     else: 
         Select_City(driver, city)
     
+    Click_Search_Button(driver)
+    Collect_Job_Information(driver)
     time.sleep(10)
     driver.quit()
     pass
@@ -140,17 +167,21 @@ if __name__ == '__main__':
 # GAME PLAN
 # 1. Get the department toggler - DONE
 # 2. Click the department toggler - DONE
-# 3. Check if the department is visible
-# 4. If the department is visible, click the department
-# 5. If the department is not visible, scroll to the department and click the department
-# 6. Get the country toggler
-# 7. Check if the country is visible
-# 8. If the country is USA, I have to click the State toggler and select the state before the city
-# 9. If the country is not USA, I only have to click the city toggler
-# 10. Check if the city is visible
-# 11. If the city is visible, click the city
-# 12. If the city is not visible, scroll to the city and click the city
+# 3. Check if the department is visible - DONE
+# 4. If the department is visible, click the department - DONE
+# 5. If the department is not visible, scroll to the department and click the department - DONE
+# 6. Get the country toggler - DONE
+# 7. Check if the country is visible - DONE
+# 8. If the country is USA, I have to click the State toggler and select the state before the city - DONE
+# 9. If the country is not USA, I only have to click the city toggler - DONE
+# 10. Check if the city is visible - DONE
+# 11. If the city is visible, click the city - DONE
+# 12. If the city is not visible, scroll to the city and click the city - DONE
 # 13. Click the search button
 
 # TO DO
 # 1. CHANGE SCROLLAREA SELECTION TO A MORE SPECIFIC SELECTOR
+# 2. REFACTOR THE CODE TO MAKE IT MORE READABLE
+# 3. ADD EXCEPTION HANDLING
+# 4. ADD LOGGING
+# 5. TRANSFORM IN CLI TOOL
