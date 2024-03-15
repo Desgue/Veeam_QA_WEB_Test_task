@@ -16,7 +16,7 @@ def New_Driver():
     return driver
 
 # GET SCROLLABLE AREA AFTER CLICKING A TOGGLER
-# 0 = Department, 1 = Country, IF COUNTRY USA 2 = STATE 3 = CITY, IF COUNTRY IS NOT USA, 2 = CITY
+# 0 = Department, 1 = Country,  2 = STATE(IF COUNTRY USA) OR CITY  3 = CITY (ONLY IF COUNTRY USA)
 def Get_Scroll_Area(driver):
     scroll_area = driver.find_elements(By.XPATH, '//*[@class="scrollarea area"]')
     return scroll_area
@@ -40,11 +40,12 @@ def Select_Department(driver, department_name):
             break
         except Exception as e:
             continue
+        driver.implicitly_wait(2)
 
 
 # City and country toggler have both the same ID of 'city-toggler'
 def Get_City_Togglers(driver):
-    # 0 = Country, 1 = City or State 2 = City if State is selected
+    # 0 = Country, 1 = City or State,  2 = City if State is selected
     toggler = driver.find_elements(By.XPATH, '//*[@id="city-toggler"]')
     return toggler
 
@@ -53,6 +54,8 @@ def Get_City_Togglers(driver):
 # FIX DEPARTMENT SELECTION WHEN FINDING A SOLUTION FOR COUNTRY SELECTION
 # ELEMENTS ARE ONLY VISIBLE UNTIL COSTA RICA CONFIRMING ASSUMPTION OF VISIBILITY
 
+
+# SELECT COUNTRY
 
 def Select_Country(driver, country_name):
     country_toggler = Get_City_Togglers(driver)[0]
@@ -68,28 +71,69 @@ def Select_Country(driver, country_name):
             break
         except Exception as e:
             continue
-    
-    
+        driver.implicitly_wait(2)
 
-    """ country = driver.find_element(By.LINK_TEXT, country_name)
-    actions = ActionChains(driver)
-    actions.move_to_element(country).perform()
-    country.click() """
-    
+
+# SELECT STATE IF COUNTRY IS USA
+def Select_State(driver, state_name):
+    state_toggler = Get_City_Togglers(driver)[1]
+    state_toggler.click()
+
+    area = Get_Scroll_Area(driver)
+    print(len(area))
+    for i in range(10):
+        driver.execute_script("arguments[0].scrollBy(0,100);", area[2]) 
+        try:    
+            state = driver.find_element(By.LINK_TEXT, state_name)
+            state.click()
+            break
+        except Exception as e:
+            continue
+
+
+# SELECT CITY
+
+def Select_City(driver, city_name, is_usa = False):
+    if is_usa:
+        city_idx = 2
+        area_idx = 3
+    else:
+        city_idx = 1
+        area_idx = 2
+
+    city_toggler = Get_City_Togglers(driver)[city_idx]
+    city_toggler.click()
+
+    area = Get_Scroll_Area(driver)
+    for a in area:
+        print(a.tag_name)
+    for i in range(10):
+        driver.execute_script("arguments[0].scrollBy(0,100);", area[area_idx]) 
+        try:    
+            department = driver.find_element(By.LINK_TEXT, city_name)
+            department.click()
+            break
+        except Exception as e:
+            continue    
+
         
 if __name__ == '__main__':
     department = "Sales"
-    country = "Romania"
+    country = "USA"
+    city = "Austin"
+    state = "Texas"
 
     driver = New_Driver()
-    
+
     Select_Department(driver, department)
     Select_Country(driver, country)
-
-    time.sleep(5)
+    if country == "USA":
+        Select_State(driver, state)
+        Select_City(driver, city, True)
+    else: 
+        Select_City(driver, city)
     
-
-
+    time.sleep(10)
     driver.quit()
     pass
 
