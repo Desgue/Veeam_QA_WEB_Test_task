@@ -122,7 +122,7 @@ class Tester:
         self.click_department_toggler()
         area = self.get_scroll_area()[DEPARTMENT_SCROLLAREA_IDX]
 
-        for i in range(10):
+        for i in range(60):
             self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
             print("Scrolling department area...") 
             try:    
@@ -145,8 +145,8 @@ class Tester:
         toggler.click()
 
         area = self.get_scroll_area()[COUNTRY_SCROLLAREA_IDX]
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
             print("Scrolling country area...")
             try:    
                 country = self.driver.find_element(By.LINK_TEXT, self.country)
@@ -169,8 +169,8 @@ class Tester:
 
         area = self.get_scroll_area()[STATE_SCROLLAREA_IDX]
 
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area)
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
             print("Scrolling state area...") 
             try:    
                 state_option = self.driver.find_element(By.LINK_TEXT, self.state)
@@ -192,8 +192,8 @@ class Tester:
         self.get_city_togglers()[WITH_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITH_STATE_CITY_SCROLLAREA_IDX]
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,100);", area) 
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
             print("Scrolling city area...")
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
@@ -215,8 +215,8 @@ class Tester:
         self.get_city_togglers()[WITHOUT_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITHOUT_STATE_CITY_SCROLLAREA_IDX]
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
             print("Scrolling city area...") 
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
