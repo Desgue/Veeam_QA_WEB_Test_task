@@ -13,7 +13,6 @@ WITHOUT_STATE_CITY_SCROLLAREA_IDX = 2
 STATE_SCROLLAREA_IDX = 2
 WITH_STATE_CITY_SCROLLAREA_IDX = 3
 
-
 COUNTRY_TOGGLER_IDX = 0
 WITHOUT_STATE_CITY_TOGGLER_IDX = 1
 STATE_TOGGLER_IDX = 1
@@ -24,6 +23,7 @@ SCROLL_AREA_XPATH_SELECTOR = '//*[@class="scrollarea area"]'
 DEPATRMENT_TOGGLER_CSS_ID = 'department-toggler'
 SEARCH_BUTTON_XPATH_SELECTOR = "//button[text()='Find a career']"
 JOB_CARD_XPATH_SELECTOR = '//div[@class="row d-none d-md-block"]/div/div/div[@class="d-none d-lg-block"]/a[@class="card card-md-45 card-no-hover card--shadowed"]'
+
 class Options:
     def __init__(
         self, 
@@ -54,9 +54,9 @@ class Tester:
         self.city = options.city
         self.state = options.state
         self.num_jobs_to_compare = options.num_jobs_to_compare
-        self.init_Driver(options.driver_path)
+        self.init_driver(options.driver_path)
 
-    def init_Driver(self, driver_path):
+    def init_driver(self, driver_path):
         service = Service(executable_path = driver_path)
         self.driver = webdriver.Chrome(service = service)
         
@@ -92,7 +92,7 @@ class Tester:
         """
         return  self.driver.find_elements(By.XPATH, SCROLL_AREA_XPATH_SELECTOR)
     
-    def click_Department_Toggler(self):
+    def click_department_toggler(self):
         """ 
         The department dropdown is the first one, and the only one with a unique css id, so we can click it directly
         """
@@ -101,11 +101,11 @@ class Tester:
         return
 
 
-    def select_Department(self):
+    def select_department(self):
         """
         This method will scroll the options area, select the department from the dropdown and click it when becomes visible
         """
-        self.click_Department_Toggler()
+        self.click_department_toggler()
         area = self.get_scroll_area()[DEPARTMENT_SCROLLAREA_IDX]
 
         for i in range(10):
@@ -220,11 +220,11 @@ class Tester:
     def scrape(self):
         """
         This method will call all the methods to scrape the website and set the available jobs list
-        And define the logic to select the city based on the country and state
+        and define the logic to select the city based on the country and state
         """
 
         self.open_browser()
-        self.select_Department()
+        self.select_department()
         self.select_country()
         if self.state:
             self.select_state()
