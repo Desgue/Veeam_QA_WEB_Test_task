@@ -20,7 +20,7 @@ WITH_STATE_CITY_TOGGLER_IDX = 2
 
 TOGGLER_ID_XPATH_SELECTOR = '//*[@id="city-toggler"]'
 SCROLL_AREA_XPATH_SELECTOR = '//*[@class="scrollarea area"]'
-DEPATRMENT_TOGGLER_CSS_ID = 'department-toggler'
+DEPARTAMENT_TOGGLER_CSS_ID = 'department-toggler'
 SEARCH_BUTTON_XPATH_SELECTOR = "//button[text()='Find a career']"
 JOB_CARD_XPATH_SELECTOR = '//div[@class="row d-none d-md-block"]/div/div/div[@class="d-none d-lg-block"]/a[@class="card card-md-45 card-no-hover card--shadowed"]'
 
