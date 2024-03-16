@@ -44,7 +44,6 @@ class Tester:
         pass
 
     def open_browser(self):
-        # some code to scrape the website
         self.driver.get(self.url)
         self.driver.maximize_window()
         
