@@ -1,9 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import  Service
 from selenium.webdriver.common.by import  By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver import ChromeOptions
 import time
 
 
@@ -33,7 +31,8 @@ class Options:
         city, 
         num_jobs_to_compare, 
         state=None, 
-        driver_path = "chromedriver.exe"):
+        driver_path = "chromedriver.exe",
+        headless = False):
         
         """ Options Class that defines the test parameters """
         self.url = url
@@ -43,7 +42,9 @@ class Options:
         self.state = state
         self.num_jobs_to_compare = num_jobs_to_compare
         self.driver_path = driver_path
-
+        self.headless = headless
+    def from_json(self, json):
+        pass
 class Tester:
     def __init__(self, options: Options):
 
@@ -54,22 +55,29 @@ class Tester:
         self.city = options.city
         self.state = options.state
         self.num_jobs_to_compare = options.num_jobs_to_compare
+        self.headless = options.headless
         self.init_driver(options.driver_path)
 
     def init_driver(self, driver_path):
+        options = ChromeOptions()  
+
+        if self.headless: 
+            options.add_argument("--headless=new") 
+
         service = Service(executable_path = driver_path)
-        self.driver = webdriver.Chrome(service = service)
-        
+        self.driver = webdriver.Chrome(service = service, options=options)
+        print("Driver initialized successfully!")
         pass
 
     def open_browser(self):
         # some code to scrape the website
         self.driver.get(self.url)
         self.driver.maximize_window()
-        
+        print("Browser opened successfully!")
         pass
 
     def close_browser(self):
+        print("Closing browser")
         self.driver.quit()
         pass
     
@@ -80,6 +88,8 @@ class Tester:
         and we will use the indexes to select the correct one
         If a country with a state is selected (eg. USA) there is one more dropdown for the state
         """
+
+        print("Getting city togglers...")
         return  self.driver.find_elements(By.XPATH, TOGGLER_ID_XPATH_SELECTOR)
         
 
@@ -90,12 +100,16 @@ class Tester:
         This method will return all scrollable areas. As we select the department first, the first scrollable area will be the department
         and so on, so we can use the indexes to select the correct one
         """
+
+        print("Getting scroll areas...")
         return  self.driver.find_elements(By.XPATH, SCROLL_AREA_XPATH_SELECTOR)
     
     def click_department_toggler(self):
         """ 
         The department dropdown is the first one, and the only one with a unique css id, so we can click it directly
         """
+
+        print("Clicking department toggler...")
         toggler = self.driver.find_element(By.ID, DEPARTAMENT_TOGGLER_CSS_ID)
         toggler.click()
         return
@@ -105,11 +119,14 @@ class Tester:
         """
         This method will scroll the options area, select the department from the dropdown and click it when becomes visible
         """
+        
+        print("Selecting department...")
         self.click_department_toggler()
         area = self.get_scroll_area()[DEPARTMENT_SCROLLAREA_IDX]
 
         for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
+            print("Scrolling department area...") 
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.department)
                 department.click()
@@ -123,12 +140,15 @@ class Tester:
         This method will select the country from the dropdown, and click it when becomes visible
         Country toggler is always the first so we can use the index 0 defined as a constant to select it
         """
+
+        print("Selecting country...")
         toggler = self.get_city_togglers()[COUNTRY_TOGGLER_IDX]
         toggler.click()
 
         area = self.get_scroll_area()[COUNTRY_SCROLLAREA_IDX]
         for i in range(10):
             self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+            print("Scrolling country area...")
             try:    
                 country = self.driver.find_element(By.LINK_TEXT, self.country)
                 country.click()
@@ -143,13 +163,16 @@ class Tester:
         State toggler is only visible if the country selected is USA and it is the second dropdown
         We can use the index 1 defined as a constant to select it
         """
+
+        print("Selecting state...")
         toggler = self.get_city_togglers()[STATE_TOGGLER_IDX]
         toggler.click()
 
         area = self.get_scroll_area()[STATE_SCROLLAREA_IDX]
 
         for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+            self.driver.execute_script("arguments[0].scrollBy(0,200);", area)
+            print("Scrolling state area...") 
             try:    
                 state_option = self.driver.find_element(By.LINK_TEXT, self.state)
                 state_option.click()
@@ -165,11 +188,14 @@ class Tester:
         We can use the index 2 defined as a constant to select it
         All the logic to decide if the city is in the USA or not is done in the scrape method
         """
+
+        print("Selecting city...")
         self.get_city_togglers()[WITH_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITH_STATE_CITY_SCROLLAREA_IDX]
         for i in range(10):
             self.driver.execute_script("arguments[0].scrollBy(0,100);", area) 
+            print("Scrolling city area...")
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
                 department.click()
@@ -185,11 +211,14 @@ class Tester:
         We can use the index 1 defined as a constant to select it
         All the logic to decide if the city is in the USA or not is done in the scrape method
         """
+
+        print("Selecting city...")
         self.get_city_togglers()[WITHOUT_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITHOUT_STATE_CITY_SCROLLAREA_IDX]
         for i in range(10):
             self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+            print("Scrolling city area...") 
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
                 department.click()
@@ -203,6 +232,7 @@ class Tester:
         This method will click the search button to display the jobs
         """
 
+        print("Clicking search button...")
         self.driver.find_element(By.XPATH, SEARCH_BUTTON_XPATH_SELECTOR).click()
         pass
     
@@ -214,6 +244,8 @@ class Tester:
         We need to select the correct one to get the job cards based on screen size
         As the requeriment demanded to maximize the window, we can use the div related to the large screen
         """
+
+        print("Collecting available jobs list...")
         self.job_list = self.driver.find_elements(By.XPATH, JOB_CARD_XPATH_SELECTOR)
         
     
@@ -236,6 +268,8 @@ class Tester:
         self.click_search_button()
         
         self.set_available_jobs_list()
+
+        print("Scraping completed successfully!")
 
     def jobs_found_match_expected(self):
         """
