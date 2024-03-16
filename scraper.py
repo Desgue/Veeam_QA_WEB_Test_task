@@ -43,8 +43,8 @@ class Options:
         self.num_jobs_to_compare = num_jobs_to_compare
         self.driver_path = driver_path
         self.headless = headless
-    def from_json(self, json):
-        pass
+
+
 class Tester:
     def __init__(self, options: Options):
 
@@ -120,7 +120,6 @@ class Tester:
         This method will scroll the options area, select the department from the dropdown and click it when becomes visible
         """
         
-        print("Selecting department...")
         self.click_department_toggler()
         area = self.get_scroll_area()[DEPARTMENT_SCROLLAREA_IDX]
 
@@ -133,6 +132,8 @@ class Tester:
                 break
             except Exception as e:
                 continue
+        print("Selecting department...")
+        pass
     
 
     def select_country(self):
@@ -141,7 +142,6 @@ class Tester:
         Country toggler is always the first so we can use the index 0 defined as a constant to select it
         """
 
-        print("Selecting country...")
         toggler = self.get_city_togglers()[COUNTRY_TOGGLER_IDX]
         toggler.click()
 
@@ -155,7 +155,8 @@ class Tester:
                 break
             except Exception as e:
                 continue    
-         
+        print("Selecting country...")
+        pass
 
     def select_state(self):
         """
@@ -164,7 +165,6 @@ class Tester:
         We can use the index 1 defined as a constant to select it
         """
 
-        print("Selecting state...")
         toggler = self.get_city_togglers()[STATE_TOGGLER_IDX]
         toggler.click()
 
@@ -179,7 +179,8 @@ class Tester:
                 break
             except Exception as e:
                 continue 
-        
+        print("Selecting state...")
+        pass
 
     def select_city_with_state(self):
         """
@@ -189,7 +190,6 @@ class Tester:
         All the logic to decide if the city is in the USA or not is done in the scrape method
         """
 
-        print("Selecting city...")
         self.get_city_togglers()[WITH_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITH_STATE_CITY_SCROLLAREA_IDX]
@@ -202,6 +202,7 @@ class Tester:
                 break
             except Exception as e:
                 continue          
+        print("Selecting city...")
         pass
 
     def select_city_without_state(self):
@@ -212,7 +213,6 @@ class Tester:
         All the logic to decide if the city is in the USA or not is done in the scrape method
         """
 
-        print("Selecting city...")
         self.get_city_togglers()[WITHOUT_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITHOUT_STATE_CITY_SCROLLAREA_IDX]
@@ -225,6 +225,7 @@ class Tester:
                 break
             except Exception as e:
                 continue          
+        print("Selecting city...")
         pass
 
     def click_search_button(self):

@@ -1,0 +1,18 @@
+[
+    {
+        "url":"https://careers.veeam.com/vacancies",
+        "department": "Sales",
+        "country": "Romania",
+        "state": null,
+        "city": "Bucharest",
+        "num_jobs_to_compare": 28
+    },
+    {
+        "url":"https://careers.veeam.com/vacancies",
+        "department": "Sales",
+        "country": "USA",
+        "state": "Texas",
+        "city": "Austin",
+        "num_jobs_to_compare":1
+    }
+]
