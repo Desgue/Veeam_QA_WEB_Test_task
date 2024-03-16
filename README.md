@@ -54,6 +54,28 @@ python main.py [--option]
 - Description: Specify a configuration JSON file path to configure test scope. If not provided, tests will run with the default scope of Romania and USA.
 - Usage: `-c <path_to_config_file.json>` or `--config <path_to_config_file.json>`
 
+#### Json format
+```json
+[
+    {
+        "url": "https://careers.veeam.com/vacancies",
+        "department": "Sales",
+        "country": "Romania",
+        "state": "",
+        "city": "Bucharest",
+        "num_jobs_to_compare": 28
+    },
+    {
+        "url": "https://careers.veeam.com/vacancies",
+        "department": "Sales",
+        "country": "USA",
+        "state": "Texas",
+        "city": "Austin",
+        "num_jobs_to_compare": 1
+    }
+]
+```
+
 ### Example
 ```python
 python main.py --headless --config test_cases.json
