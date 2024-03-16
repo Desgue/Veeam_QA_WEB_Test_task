@@ -19,7 +19,7 @@ You can use a browser of your choice.
 
 Please do not use ChatGPT or similar tools.
 
-## Installation and Running
+## Installation
 Make sure you have python and pip updated to latest version
 
 1. Clone the repository
@@ -31,13 +31,36 @@ git clone https://github.com/Desgue/Veeam_QA_WEB_Test_task.git
 ```
 pip install selenium
 ```
-3- On root folder run
-```
-python main.py
-```
+
 
 ## Usage
-1. On main.py create a options object to define your test settings. 
+
+**Command Syntax** 
+```
+python main.py [--option]
+```
+### Optional Arguments
+
+#### `--headless`
+- Description: Run the tests in headless mode. If enabled, the browser window will not be visible during testing.
+- Usage: `--headless`
+- Default: False
+
+#### `--no-headless`
+- Description: Run the tests with browser view mode. This is the default behavior.
+- Usage: `--no-headless`
+
+#### `-c`, `--config`
+- Description: Specify a configuration JSON file path to configure test scope. If not provided, tests will run with the default scope of Romania and USA.
+- Usage: `-c <path_to_config_file.json>` or `--config <path_to_config_file.json>`
+
+### Example
+```python
+python main.py --headless --config test_cases.json
+```
+
+### Modifying the script
+1. On cmd.py create a options object inside ***the run_default_test*** function to define your test settings. 
    ```
        options = scraper.Options(url="https://careers.veeam.com/vacancies",
                             department="Sales",
@@ -45,7 +68,7 @@ python main.py
                             city="Bucharest",
                             num_jobs_to_compare=28)
    ```
-The variable **num_of_jobs_to_compare** is what we are testing the website against. A sucessfull test means the script sucessfully collected all jobs listed for a particular department, country and city.
+The variable ***num_jobs_to_compare*** is what we are testing the website against. A sucessfull test means the script sucessfully collected all jobs listed for a particular department, country and city.
 
 2. Inject the Options instance in a Tester instance
    ```
@@ -60,9 +83,9 @@ The script should test if the number of available jobs is the same as the number
 The scripts logs the result of the comparison after it finishs running.
 
 ## Features on Development
-1. Accept a file input with multiple config objects to perform batches of tests
-2. Log results to a .log file for easier debugging and analysis
+1. ~~Accept a file input with multiple config objects to perform batches of tests~~
+2. ~~Accept a flag to toggle between running headless or not~~
 3. Accept a flag for running multiple tests in parallel
-4. Accept a flag to toggle between running headless or not
+4. Log results to a .log file for easier debugging and analysis
 
    
