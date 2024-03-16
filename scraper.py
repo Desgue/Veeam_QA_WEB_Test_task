@@ -56,29 +56,29 @@ class Tester:
         self.state = options.state
         self.num_jobs_to_compare = options.num_jobs_to_compare
         self.headless = options.headless
-        self.init_driver(options.driver_path)
+        self.driver_path = options.driver_path
 
-    def init_driver(self, driver_path):
+    def init_driver(self):
         options = ChromeOptions()  
-
         if self.headless: 
             options.add_argument("--headless=new") 
 
-        service = Service(executable_path = driver_path)
+        service = Service(executable_path = self.driver_path)
         self.driver = webdriver.Chrome(service = service, options=options)
         print("Driver initialized successfully!")
-        pass
+        return
 
     def open_browser(self):
+        self.init_driver() 
         self.driver.get(self.url)
         self.driver.maximize_window()
         print("Browser opened successfully!")
-        pass
+        return
 
     def close_browser(self):
         print("Closing browser")
         self.driver.quit()
-        pass
+        return
     
     def get_city_togglers(self):
         """ 
@@ -122,7 +122,7 @@ class Tester:
         self.click_department_toggler()
         area = self.get_scroll_area()[DEPARTMENT_SCROLLAREA_IDX]
 
-        for i in range(10):
+        for i in range(60):
             self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
             print("Scrolling department area...") 
             try:    
@@ -132,7 +132,7 @@ class Tester:
             except Exception as e:
                 continue
         print("Selecting department...")
-        pass
+        return
     
 
     def select_country(self):
@@ -145,8 +145,8 @@ class Tester:
         toggler.click()
 
         area = self.get_scroll_area()[COUNTRY_SCROLLAREA_IDX]
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
             print("Scrolling country area...")
             try:    
                 country = self.driver.find_element(By.LINK_TEXT, self.country)
@@ -155,7 +155,7 @@ class Tester:
             except Exception as e:
                 continue    
         print("Selecting country...")
-        pass
+        return
 
     def select_state(self):
         """
@@ -169,8 +169,8 @@ class Tester:
 
         area = self.get_scroll_area()[STATE_SCROLLAREA_IDX]
 
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area)
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
             print("Scrolling state area...") 
             try:    
                 state_option = self.driver.find_element(By.LINK_TEXT, self.state)
@@ -179,7 +179,7 @@ class Tester:
             except Exception as e:
                 continue 
         print("Selecting state...")
-        pass
+        return
 
     def select_city_with_state(self):
         """
@@ -192,8 +192,8 @@ class Tester:
         self.get_city_togglers()[WITH_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITH_STATE_CITY_SCROLLAREA_IDX]
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,100);", area) 
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
             print("Scrolling city area...")
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
@@ -202,7 +202,7 @@ class Tester:
             except Exception as e:
                 continue          
         print("Selecting city...")
-        pass
+        return
 
     def select_city_without_state(self):
         """
@@ -215,8 +215,8 @@ class Tester:
         self.get_city_togglers()[WITHOUT_STATE_CITY_TOGGLER_IDX].click()
 
         area = self.get_scroll_area()[WITHOUT_STATE_CITY_SCROLLAREA_IDX]
-        for i in range(10):
-            self.driver.execute_script("arguments[0].scrollBy(0,200);", area) 
+        for i in range(60):
+            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
             print("Scrolling city area...") 
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
@@ -225,7 +225,7 @@ class Tester:
             except Exception as e:
                 continue          
         print("Selecting city...")
-        pass
+        return
 
     def click_search_button(self):
         """
@@ -234,7 +234,7 @@ class Tester:
 
         print("Clicking search button...")
         self.driver.find_element(By.XPATH, SEARCH_BUTTON_XPATH_SELECTOR).click()
-        pass
+        return
     
     def set_available_jobs_list(self):
         """
@@ -285,10 +285,33 @@ class Tester:
         self.scrape()
         if self.jobs_found_match_expected():
             print("Test Passed, the number of jobs displayed is as expected")
-            print("Number of jobs displayed: ", len(self.job_list))
-            print("Number of jobs expected: ", self.num_jobs_to_compare)
+
+            sucessfull_test_message = f""" 
+
+            Test Passed, the number of jobs displayed is as expected
+            -----------------------
+            Department tested: {self.department}
+            Country tested: {self.country}
+            State tested: {self.state}
+            City tested: {self.city}
+            -----------------------
+            Number of jobs displayed: {len(self.job_list)}
+            Number of jobs expected: {self.num_jobs_to_compare}
+            """
+            print(sucessfull_test_message)
         else:
-            print("Test Failed, the number of jobs displayed is not as expected")
-            print("Number of jobs displayed: ", len(self.job_list))
-            print("Number of jobs expected: ", self.num_jobs_to_compare)
+            unsuccessful_test_message = f"""
+
+            Test Failed, the number of jobs displayed is not as expected
+            -----------------------
+            Department tested: {self.department}
+            Country tested: {self.country}
+            State tested: {self.state}
+            City tested: {self.city}
+            -----------------------
+            Number of jobs displayed: {len(self.job_list)}
+            Number of jobs expected: {self.num_jobs_to_compare}
+            """
+            print(unsuccessful_test_message)
+
         self.close_browser()
