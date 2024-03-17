@@ -34,7 +34,7 @@ def configure_arg_parser():
         help="Run the tests concurrently. If you want to run multiple tests set this to true. Default is 1 process.  '-p 6' will run 6 processes concurrently.",
         type=int,
         )
-    parser.set_defaults(headless=False, processes=1)
+    parser.set_defaults(headless=False, processes=1, config=None)
     return parser
 
 
