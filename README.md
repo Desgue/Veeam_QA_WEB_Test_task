@@ -37,13 +37,15 @@ pip install selenium
 
 **Command Syntax** 
 
-To test only the main requirements demanded, run
+To test only the main requirements demanded run
 ```
 python main.py
 ```
 
 Optionally you can pass arguments to provide a Json file with additional test cases, set headless mode and set the number of processes used to run the script.
+
 All defaults are set so the script tests the main requirements only. 
+
 All options can be set interchangeably and none is required for the program to run.
 ```
 python main.py [--option]
@@ -99,11 +101,11 @@ python main.py [--option]
 ```python
 python main.py --headless --config test_cases.json --processes 10
 ```
-Will selenium on headless mode, load the test cases provided with the Json file and will max out the process at 10 if needed.
+Will run selenium on headless mode, load the test cases provided with the Json file and will max out the process at 10.
 
 ### File structure
-1. main.py - The entry point of the program, parses the arguments, construct the object and call the run method.
-2. scraper.py - Is where the core logicof the program is, it defines two classes Options and Tester, options is responsible for holding all the configuration options for the scraping, to be injected into the Tester class, that in its turn will perform the website scraping and compare te results to the provided expected result.
+1. main.py - The entry point of the program, parses the arguments, construct the Test object and call the Test.run() method.
+2. scraper.py - Is where the core logic of the program is, it defines two classes Options and Tester, options is responsible for holding all the configuration options for the scraping, such as which department, city and country to scrape, to be injected into the Tester class, that in its turn will perform the website scraping and compare te results to the provided expected result.
 3. test.py - Defines a Test class that is responsible for holding the configuration for the Test and perform logic based on the Command Line arguments provided. It constructs the Options and Tester objects and holds the logic necessary to call the Tester.run() method.
 4. test_cases.json - Is a json file with different test scenarios used to assert the script is working under different conditions.
 5. misc/old_code.py - Is the POC code developed with comments made during the process.
