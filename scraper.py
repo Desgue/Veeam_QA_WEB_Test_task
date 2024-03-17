@@ -46,7 +46,10 @@ class Options:
 
 
 class Tester:
-    def __init__(self, options: Options):
+    def __init__(
+        self, 
+        options: Options = None, 
+        ):
 
         """ Init Tester object with options parameters"""
         self.url = options.url
@@ -58,6 +61,19 @@ class Tester:
         self.headless = options.headless
         self.driver_path = options.driver_path
 
+        """ Log Messages """ 
+        self.department_selected_message = f"\n\tSelecting department {self.department}"
+        self.department_not_found_message = f"\n\tDepartment {self.department} not found in the dropdown\n\tExiting Test"
+        self.country_selected_message = f"\n\tSelecting country {self.country}"
+        self.country_not_found_message = f"\n\tCountry {self.country} not found in the dropdown\n\tExiting Test"
+        self.state_selected_message = f"\n\tSelecting state {self.state}"
+        self.state_not_found_message = f"\n\tState {self.state} not found in the dropdown\n\tExiting Test"
+        self.city_selected_message = f"\n\tSelecting city {self.city}"
+        self.city_not_found_message = f"\n\tCity {self.city} not found in the dropdown\n\tExiting Test"
+        self.searching_jobs_message = f"\n\tSearching for jobs in {self.department} department in {self.city} - {self.country}"
+
+        return 
+
     def init_driver(self):
         options = ChromeOptions()  
         if self.headless: 
@@ -65,18 +81,17 @@ class Tester:
 
         service = Service(executable_path = self.driver_path)
         self.driver = webdriver.Chrome(service = service, options=options)
-        print("Driver initialized successfully!")
         return
 
     def open_browser(self):
         self.init_driver() 
         self.driver.get(self.url)
         self.driver.maximize_window()
-        print("Browser opened successfully!")
+        print("\n\tOpening browser")
         return
 
     def close_browser(self):
-        print("Closing browser")
+        print("\n\tClosing browser")
         self.driver.quit()
         return
     
@@ -87,8 +102,6 @@ class Tester:
         and we will use the indexes to select the correct one
         If a country with a state is selected (eg. USA) there is one more dropdown for the state
         """
-
-        print("Getting city togglers...")
         return  self.driver.find_elements(By.XPATH, TOGGLER_ID_XPATH_SELECTOR)
         
     def get_scroll_area(self):
@@ -98,18 +111,15 @@ class Tester:
         This method will return all scrollable areas. As we select the department first, the first scrollable area will be the department
         and so on, so we can use the indexes to select the correct one
         """
-
-        print("Getting scroll areas...")
         return  self.driver.find_elements(By.XPATH, SCROLL_AREA_XPATH_SELECTOR)
     
     def click_department_toggler(self):
         """ 
         The department dropdown is the first one, and the only one with a unique css id, so we can click it directly
         """
-
-        print("Clicking department toggler...")
         toggler = self.driver.find_element(By.ID, DEPARTAMENT_TOGGLER_CSS_ID)
         toggler.click()
+        
         return
 
     def select_department(self):
@@ -130,18 +140,12 @@ class Tester:
                 continue
             finally:
                 self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
-                print("Scrolling department area...")
-
         if not is_clicked:
-            print(
-                f"""
-                Department {self.department} not found in the dropdown
-                """
-                )
+            print(self.department_not_found_message)
             self.close_browser()
             return
 
-        print("Selecting department...")
+        print(self.department_selected_message)
         return
     
     def select_country(self):
@@ -164,18 +168,13 @@ class Tester:
                 continue    
             finally:    
                 self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
-                print("Scrolling country area...")
 
         if not is_clicked:
-            print(
-                f"""
-                Country {self.country} not found in the dropdown
-                """
-                )
+            print(self.country_not_found_message)
             self.close_browser()
             return
 
-        print("Selecting country...")
+        print(self.country_selected_message)
         return
 
     def select_state(self):
@@ -199,17 +198,12 @@ class Tester:
                 continue
             finally:
                 self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
-                print("Scrolling state area...") 
 
         if not is_clicked:
-            print(
-                f"""
-                State {self.state} not found in the dropdown
-                """
-                )
+            print(self.state_not_found_message)
             self.close_browser()
             return
-        print("Selecting state...")
+        print(self.state_selected_message)
         return
 
     def select_city_with_state(self):
@@ -233,17 +227,12 @@ class Tester:
                 continue          
             finally:
                 self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
-                print("Scrolling city area...")
         if not is_clicked:
-            print(
-                f"""
-                City {self.city} not found in the dropdown
-                """
-                )
+            print(self.city_not_found_message)
             self.close_browser()
             return
 
-        print("Selecting city...")
+        print(self.city_selected_message)
         return
 
     def select_city_without_state(self):
@@ -266,18 +255,13 @@ class Tester:
                 continue          
             finally:
                 self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
-                print("Scrolling city area...")
 
         if not is_clicked:
-            print(
-                f"""
-                City {self.city} not found in the dropdown
-                """
-                )
+            print(self.city_not_found_message)
             self.close_browser()
             return
 
-        print("Selecting city...")
+        print(self.city_selected_message)
         return
 
     def click_search_button(self):
@@ -285,7 +269,7 @@ class Tester:
         This method will click the search button to display the jobs
         """
 
-        print("Clicking search button...")
+        print(self.searching_jobs_message)
         self.driver.find_element(By.XPATH, SEARCH_BUTTON_XPATH_SELECTOR).click()
         return
     
@@ -298,7 +282,7 @@ class Tester:
         As the requeriment demanded to maximize the window, we can use the div related to the large screen
         """
 
-        print("Collecting available jobs list...")
+        print("\n\tCollecting available jobs list...")
         self.job_list = self.driver.find_elements(By.XPATH, JOB_CARD_XPATH_SELECTOR)
         
     
@@ -322,7 +306,7 @@ class Tester:
         
         self.set_available_jobs_list()
 
-        print("Scraping completed successfully!")
+        print("\n\tFinished scraping...")
 
     def jobs_found_match_expected(self):
         """
@@ -337,34 +321,31 @@ class Tester:
         """
         self.scrape()
         if self.jobs_found_match_expected():
-            print("Test Passed, the number of jobs displayed is as expected")
-
             sucessfull_test_message = f""" 
-
-            Test Passed, the number of jobs displayed is as expected
-            -----------------------
-            Department tested: {self.department}
-            Country tested: {self.country}
-            State tested: {self.state}
-            City tested: {self.city}
-            -----------------------
-            Number of jobs displayed: {len(self.job_list)}
-            Number of jobs expected: {self.num_jobs_to_compare}
-            """
+        Test Passed, the number of jobs displayed is as expected
+        -----------------------
+        Department tested: {self.department}
+        Country tested: {self.country}
+        State tested: {self.state}
+        City tested: {self.city}
+        -----------------------
+        Number of jobs displayed: {len(self.job_list)}
+        Number of jobs expected: {self.num_jobs_to_compare}
+        """
             print(sucessfull_test_message)
         else:
             unsuccessful_test_message = f"""
-
-            Test Failed, the number of jobs displayed is not as expected
-            -----------------------
-            Department tested: {self.department}
-            Country tested: {self.country}
-            State tested: {self.state}
-            City tested: {self.city}
-            -----------------------
-            Number of jobs displayed: {len(self.job_list)}
-            Number of jobs expected: {self.num_jobs_to_compare}
-            """
+        Test Failed, the number of jobs displayed is not as expected
+        -----------------------
+        Department tested: {self.department}
+        Country tested: {self.country}
+        State tested: {self.state}
+        City tested: {self.city}
+        -----------------------
+        Number of jobs displayed: {len(self.job_list)}
+        Number of jobs expected: {self.num_jobs_to_compare}
+        """
             print(unsuccessful_test_message)
 
         self.close_browser()
+        return
