@@ -35,7 +35,7 @@ class Test:
             config_data = json.load(file)
             file.close()
         for config in config_data:    
-            options = scraper.Options(url=config['url'],
+            options = scraper.Options(
                     department=config['department'],
                     country=config['country'],
                     state=config['state'],
@@ -52,13 +52,13 @@ class Test:
             return tests_options
         else:
             print(self.default_test_message)
-            romania_option = scraper.Options(url="https://careers.veeam.com/vacancies",
+            romania_option = scraper.Options(
                         department="Sales",
                         country="Romania",
                         city="Bucharest",
                         num_jobs_to_compare=28,
                         headless=self.headless)
-            usa_option = scraper.Options(url="https://careers.veeam.com/vacancies",
+            usa_option = scraper.Options(
                                     department="Sales",
                                     country="USA",
                                     state="Texas",

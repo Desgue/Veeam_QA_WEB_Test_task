@@ -5,6 +5,8 @@ from selenium.webdriver import ChromeOptions
 import time
 
 
+URL = "https://careers.veeam.com/vacancies"
+
 DEPARTMENT_SCROLLAREA_IDX = 0
 COUNTRY_SCROLLAREA_IDX = 1
 WITHOUT_STATE_CITY_SCROLLAREA_IDX = 2
@@ -25,7 +27,6 @@ JOB_CARD_XPATH_SELECTOR = '//div[@class="row d-none d-md-block"]/div/div/div[@cl
 class Options:
     def __init__(
         self, 
-        url, 
         department, 
         country, 
         city, 
@@ -35,7 +36,7 @@ class Options:
         headless = False):
         
         """ Options Class that defines the test parameters """
-        self.url = url
+        self.url = URL
         self.department = department
         self.country = country
         self.city = city
