@@ -1,6 +1,10 @@
 # Veeam Junior QA Assessment
 
-## Requeriments
+## Introduction
+This repository contains the code that implements the Veeam Junior QA Automation/Manual Tester interview challenge
+
+
+## The challenge
 - Open https://careers.veeam.com/vacancies and maximize the browser window.
 - Then, using the jobs filter on the page, count the number of Sales positions in two locations:
   - Romania, Bucharest
@@ -19,15 +23,31 @@ You can use a browser of your choice.
 
 Please do not use ChatGPT or similar tools.
 
+## The Solution
+The solution is a CLI tool that uses Selenium to automate user input and scrapes how many jobs there are for a specific position, country and city to compare with the expected number of positions counted manually.
+
+### CLI Features
+1. Headless mode for running Selenium on the background
+2. Multiprocess to handle multiple tests asynchronously
+3. Acepts an optional Json file to test additional cases
+
+
 ## Installation
-Make sure you have python and pip updated to latest version
+### Requirements
+
+**Python v3.12**
+
+**pip v23.3.2**
+
+**A broswer driver of your choice**
 
 1. Clone the repository
+
 ```
 git clone https://github.com/Desgue/Veeam_QA_WEB_Test_task.git
 ```
 
-2- Install selenium (only 3rd party dependency)
+2. Install selenium (only 3rd party dependency)
 ```
 pip install selenium
 ```
@@ -42,7 +62,7 @@ To test only the main requirements demanded run
 python main.py
 ```
 
-Optionally you can pass arguments to provide a Json file with additional test cases, set headless mode and set the number of processes used to run the script.
+Optionally you can pass arguments to provide a Json file with additional test cases, set headless mode and set the number of parallel processes used to run the script.
 
 All defaults are set so the script tests the main requirements only. 
 
@@ -101,15 +121,15 @@ python main.py [--option]
 ```python
 python main.py --headless --config test_cases.json --processes 10
 ```
-Will run selenium on headless mode, load the test cases provided with the Json file and will max out the process at 10.
+The above command will run selenium on headless mode, load the test cases provided with the Json file and will max out the process at 10.
 
 ### File structure
 1. main.py - The entry point of the program, parses the arguments, construct the Test object and call the Test.run() method.
-2. scraper.py - Is where the core logic of the program is, it defines two classes Options and Tester, options is responsible for holding all the configuration options for the scraping, such as which department, city and country to scrape, to be injected into the Tester class, that in its turn will perform the website scraping and compare te results to the provided expected result.
+2. scraper.py - Contains the core logic of the program, defines two classes Options and Tester, options is responsible for holding all the configuration options for the scraping, such as which department, city and country to scrape. The Tester class will perform the website scraping and compare te results to the provided expected result.
 3. test.py - Defines a Test class that is responsible for holding the configuration for the Test and perform logic based on the Command Line arguments provided. It constructs the Options and Tester objects and holds the logic necessary to call the Tester.run() method.
-4. test_cases.json - Is a json file with different test scenarios used to assert the script is working under different conditions.
+4. test_cases.json - A json file with different test scenarios used to assert the script is working under different conditions.
 5. misc/old_code.py - Is the POC code developed with comments made during the process.
-6. chormedriver.exe - Is the driver choosen for selenium. 
+
 
 
 
