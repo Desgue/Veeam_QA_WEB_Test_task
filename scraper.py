@@ -31,7 +31,7 @@ class Options:
         city, 
         num_jobs_to_compare, 
         state=None, 
-        driver_path = "chromedriver.exe",
+        drive_path = "chromedriver.exe",
         headless = False):
         
         """ Options Class that defines the test parameters """
@@ -41,51 +41,47 @@ class Options:
         self.city = city
         self.state = state
         self.num_jobs_to_compare = num_jobs_to_compare
-        self.driver_path = driver_path
+        self.drive_path = drive_path
         self.headless = headless
 
 
 class Tester:
     def __init__(
         self, 
-        options: Options = None, 
+        options: Options, 
         ):
 
         """ Init Tester object with options parameters"""
-        self.url = options.url
-        self.department = options.department
-        self.country = options.country
-        self.city = options.city
-        self.state = options.state
-        self.num_jobs_to_compare = options.num_jobs_to_compare
-        self.headless = options.headless
-        self.driver_path = options.driver_path
+        self.options = options
+        if not self.options:
+            raise ValueError("Options parameter is required")
+
 
         """ Log Messages """ 
-        self.department_selected_message = f"\n\tSelecting department {self.department}"
-        self.department_not_found_message = f"\n\tDepartment {self.department} not found in the dropdown\n\tExiting Test"
-        self.country_selected_message = f"\n\tSelecting country {self.country}"
-        self.country_not_found_message = f"\n\tCountry {self.country} not found in the dropdown\n\tExiting Test"
-        self.state_selected_message = f"\n\tSelecting state {self.state}"
-        self.state_not_found_message = f"\n\tState {self.state} not found in the dropdown\n\tExiting Test"
-        self.city_selected_message = f"\n\tSelecting city {self.city}"
-        self.city_not_found_message = f"\n\tCity {self.city} not found in the dropdown\n\tExiting Test"
-        self.searching_jobs_message = f"\n\tSearching for jobs in {self.department} department in {self.city} - {self.country}"
+        self.department_selected_message = f"\n\tSelecting department {self.options.department}"
+        self.department_not_found_message = f"\n\tDepartment {self.options.department} not found in the dropdown\n\tExiting Test"
+        self.country_selected_message = f"\n\tSelecting country {self.options.country}"
+        self.country_not_found_message = f"\n\tCountry {self.options.country} not found in the dropdown\n\tExiting Test"
+        self.state_selected_message = f"\n\tSelecting state {self.options.state}"
+        self.state_not_found_message = f"\n\tState {self.options.state} not found in the dropdown\n\tExiting Test"
+        self.city_selected_message = f"\n\tSelecting city {self.options.city}"
+        self.city_not_found_message = f"\n\tCity {self.options.city} not found in the dropdown\n\tExiting Test"
+        self.searching_jobs_message = f"\n\tSearching for jobs in {self.options.department} department in {self.options.city} - {self.options.country}"
 
         return 
 
     def init_driver(self):
         options = ChromeOptions()  
-        if self.headless: 
+        if self.options.headless: 
             options.add_argument("--headless=new") 
 
-        service = Service(executable_path = self.driver_path)
+        service = Service(executable_path = self.options.drive_path)
         self.driver = webdriver.Chrome(service = service, options=options)
         return
 
     def open_browser(self):
         self.init_driver() 
-        self.driver.get(self.url)
+        self.driver.get(self.options.url)
         self.driver.maximize_window()
         print("\n\tOpening browser")
         return
@@ -132,7 +128,7 @@ class Tester:
         is_clicked = False
         for i in range(80):
             try:    
-                department = self.driver.find_element(By.LINK_TEXT, self.department)
+                department = self.driver.find_element(By.LINK_TEXT, self.options.department)
                 department.click()
                 is_clicked = True
                 break
@@ -160,7 +156,7 @@ class Tester:
         is_clicked = False
         for i in range(80):
             try:    
-                country = self.driver.find_element(By.LINK_TEXT, self.country)
+                country = self.driver.find_element(By.LINK_TEXT, self.options.country)
                 country.click()
                 is_clicked = True
                 break
@@ -190,7 +186,7 @@ class Tester:
         is_clicked = False
         for i in range(80):
             try:    
-                state_option = self.driver.find_element(By.LINK_TEXT, self.state)
+                state_option = self.driver.find_element(By.LINK_TEXT, self.options.state)
                 state_option.click()
                 is_clicked = True
                 break
@@ -219,7 +215,7 @@ class Tester:
         is_clicked = False
         for i in range(80):
             try:    
-                department = self.driver.find_element(By.LINK_TEXT, self.city)
+                department = self.driver.find_element(By.LINK_TEXT, self.options.city)
                 department.click()
                 is_clicked = True
                 break
@@ -247,7 +243,7 @@ class Tester:
         area = self.get_scroll_area()[WITHOUT_STATE_CITY_SCROLLAREA_IDX]
         for i in range(80):
             try:    
-                department = self.driver.find_element(By.LINK_TEXT, self.city)
+                department = self.driver.find_element(By.LINK_TEXT, self.options.city)
                 department.click()
                 is_clicked = True
                 break
@@ -295,7 +291,7 @@ class Tester:
         self.open_browser()
         self.select_department()
         self.select_country()
-        if self.state:
+        if self.options.state:
             self.select_state()
             self.select_city_with_state()
 
@@ -312,7 +308,7 @@ class Tester:
         """
         Return a bool that indicates if the number of jobs found is the same as the expected
         """
-        return len(self.job_list) == self.num_jobs_to_compare
+        return len(self.job_list) == self.options.num_jobs_to_compare
     
     def run(self):
         """
@@ -324,26 +320,26 @@ class Tester:
             sucessfull_test_message = f""" 
         Test Passed, the number of jobs displayed is as expected
         -----------------------
-        Department tested: {self.department}
-        Country tested: {self.country}
-        State tested: {self.state}
-        City tested: {self.city}
+        Department tested: {self.options.department}
+        Country tested: {self.options.country}
+        State tested: {self.options.state}
+        City tested: {self.options.city}
         -----------------------
         Number of jobs displayed: {len(self.job_list)}
-        Number of jobs expected: {self.num_jobs_to_compare}
+        Number of jobs expected: {self.options.num_jobs_to_compare}
         """
             print(sucessfull_test_message)
         else:
             unsuccessful_test_message = f"""
         Test Failed, the number of jobs displayed is not as expected
         -----------------------
-        Department tested: {self.department}
-        Country tested: {self.country}
-        State tested: {self.state}
-        City tested: {self.city}
+        Department tested: {self.options.department}
+        Country tested: {self.options.country}
+        State tested: {self.options.state}
+        City tested: {self.options.city}
         -----------------------
         Number of jobs displayed: {len(self.job_list)}
-        Number of jobs expected: {self.num_jobs_to_compare}
+        Number of jobs expected: {self.options.num_jobs_to_compare}
         """
             print(unsuccessful_test_message)
 
