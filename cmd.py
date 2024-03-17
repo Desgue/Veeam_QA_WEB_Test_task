@@ -5,8 +5,13 @@ from multiprocessing.pool import ThreadPool as Pool
 import time
 
 
-def run_default_test(headless: bool, run_in_thread: bool = False):
+def run_default_test(
+    headless: bool, 
+    processes: int = 1
+    ):
     start = time.perf_counter()
+    pool = Pool(processes)
+
     romania_options = scraper.Options(url="https://careers.veeam.com/vacancies",
                             department="Sales",
                             country="Romania",
@@ -21,10 +26,6 @@ def run_default_test(headless: bool, run_in_thread: bool = False):
                             city="Austin",
                             num_jobs_to_compare=1,
                             headless=headless)
-    if run_in_thread:
-        pool = Pool(2)
-    else:
-        pool = Pool(1)
 
     romania_tester = scraper.Tester(romania_options)
     usa_tester = scraper.Tester(usa_options)  
@@ -40,13 +41,15 @@ def run_default_test(headless: bool, run_in_thread: bool = False):
     """)
     return 
 
-def run_test_with_config_file(path_to_config_file: str, headless: bool, run_in_thread: bool = False):
+def run_test_with_config_file(
+    path_to_config_file: str, 
+    headless: bool, 
+    processes: int = 1
+    ):
     start = time.perf_counter()
     config_data = parse_config_file(path_to_config_file)
-    if run_in_thread:
-        pool = Pool(len(config_data))
-    else:
-        pool = Pool(1)
+    pool= Pool(processes)
+
     def run_test(config):
         options = scraper.Options(url=config['url'],
                     department=config['department'],
@@ -73,6 +76,12 @@ def run_test_with_config_file(path_to_config_file: str, headless: bool, run_in_t
 
     return
 
+def parse_config_file(config_file):
+    ## Load Json
+    with open(config_file, 'r') as file:
+        config_data = json.load(file)
+        file.close()
+    return config_data
 
 
 
@@ -103,17 +112,12 @@ def configure_arg_parser():
         You may pass a list of options to test multiple locations and departments, but I would recommend to set -h false to run the tests in headless mode.
         """,
          type=str)
+
     parser.add_argument(
-        "-t", "--thread",
-        help="Run the tests in threads. If you want to run multiple tests set this to true. Default is false.",
-        action="store_true",
+        "-p", "--processes",
+        help="Run the tests concurrently. If you want to run multiple tests set this to true. Default is 1 process.  '-p 6' will run 6 processes concurrently.",
+        type=int,
         )
-    parser.set_defaults(headless=False)
+    parser.set_defaults(headless=False, processes=1)
     return parser
 
-def parse_config_file(config_file):
-    ## Load Json
-    with open(config_file, 'r') as file:
-        config_data = json.load(file)
-        file.close()
-    return config_data

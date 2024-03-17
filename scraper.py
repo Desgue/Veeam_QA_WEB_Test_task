@@ -91,7 +91,6 @@ class Tester:
         print("Getting city togglers...")
         return  self.driver.find_elements(By.XPATH, TOGGLER_ID_XPATH_SELECTOR)
         
-
     def get_scroll_area(self):
         """
         After clicking a dropdown, a div with a scrollable area will appear with the options
@@ -113,7 +112,6 @@ class Tester:
         toggler.click()
         return
 
-
     def select_department(self):
         """
         This method will scroll the options area, select the department from the dropdown and click it when becomes visible
@@ -121,20 +119,31 @@ class Tester:
         
         self.click_department_toggler()
         area = self.get_scroll_area()[DEPARTMENT_SCROLLAREA_IDX]
-
-        for i in range(60):
-            self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
-            print("Scrolling department area...") 
+        is_clicked = False
+        for i in range(80):
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.department)
                 department.click()
+                is_clicked = True
                 break
             except Exception as e:
                 continue
+            finally:
+                self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
+                print("Scrolling department area...")
+
+        if not is_clicked:
+            print(
+                f"""
+                Department {self.department} not found in the dropdown
+                """
+                )
+            self.close_browser()
+            return
+
         print("Selecting department...")
         return
     
-
     def select_country(self):
         """
         This method will select the country from the dropdown, and click it when becomes visible
@@ -143,17 +152,29 @@ class Tester:
 
         toggler = self.get_city_togglers()[COUNTRY_TOGGLER_IDX]
         toggler.click()
-
         area = self.get_scroll_area()[COUNTRY_SCROLLAREA_IDX]
-        for i in range(60):
-            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
-            print("Scrolling country area...")
+        is_clicked = False
+        for i in range(80):
             try:    
                 country = self.driver.find_element(By.LINK_TEXT, self.country)
                 country.click()
+                is_clicked = True
                 break
             except Exception as e:
                 continue    
+            finally:    
+                self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
+                print("Scrolling country area...")
+
+        if not is_clicked:
+            print(
+                f"""
+                Country {self.country} not found in the dropdown
+                """
+                )
+            self.close_browser()
+            return
+
         print("Selecting country...")
         return
 
@@ -166,18 +187,28 @@ class Tester:
 
         toggler = self.get_city_togglers()[STATE_TOGGLER_IDX]
         toggler.click()
-
         area = self.get_scroll_area()[STATE_SCROLLAREA_IDX]
-
-        for i in range(60):
-            self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
-            print("Scrolling state area...") 
+        is_clicked = False
+        for i in range(80):
             try:    
                 state_option = self.driver.find_element(By.LINK_TEXT, self.state)
                 state_option.click()
+                is_clicked = True
                 break
             except Exception as e:
-                continue 
+                continue
+            finally:
+                self.driver.execute_script("arguments[0].scrollBy(0,50);", area)
+                print("Scrolling state area...") 
+
+        if not is_clicked:
+            print(
+                f"""
+                State {self.state} not found in the dropdown
+                """
+                )
+            self.close_browser()
+            return
         print("Selecting state...")
         return
 
@@ -190,17 +221,28 @@ class Tester:
         """
 
         self.get_city_togglers()[WITH_STATE_CITY_TOGGLER_IDX].click()
-
         area = self.get_scroll_area()[WITH_STATE_CITY_SCROLLAREA_IDX]
-        for i in range(60):
-            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
-            print("Scrolling city area...")
+        is_clicked = False
+        for i in range(80):
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
                 department.click()
+                is_clicked = True
                 break
             except Exception as e:
                 continue          
+            finally:
+                self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
+                print("Scrolling city area...")
+        if not is_clicked:
+            print(
+                f"""
+                City {self.city} not found in the dropdown
+                """
+                )
+            self.close_browser()
+            return
+
         print("Selecting city...")
         return
 
@@ -211,19 +253,30 @@ class Tester:
         We can use the index 1 defined as a constant to select it
         All the logic to decide if the city is in the USA or not is done in the scrape method
         """
-
+        is_clicked = False
         self.get_city_togglers()[WITHOUT_STATE_CITY_TOGGLER_IDX].click()
-
         area = self.get_scroll_area()[WITHOUT_STATE_CITY_SCROLLAREA_IDX]
-        for i in range(60):
-            self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
-            print("Scrolling city area...") 
+        for i in range(80):
             try:    
                 department = self.driver.find_element(By.LINK_TEXT, self.city)
                 department.click()
+                is_clicked = True
                 break
             except Exception as e:
                 continue          
+            finally:
+                self.driver.execute_script("arguments[0].scrollBy(0,50);", area) 
+                print("Scrolling city area...")
+
+        if not is_clicked:
+            print(
+                f"""
+                City {self.city} not found in the dropdown
+                """
+                )
+            self.close_browser()
+            return
+
         print("Selecting city...")
         return
 
