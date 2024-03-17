@@ -1,18 +1,125 @@
 [
-    {
-        "url":"https://careers.veeam.com/vacancies",
-        "department": "Sales",
-        "country": "Romania",
-        "state": null,
-        "city": "Bucharest",
-        "num_jobs_to_compare": 28
-    },
-    {
-        "url":"https://careers.veeam.com/vacancies",
-        "department": "Sales",
-        "country": "USA",
-        "state": "Texas",
-        "city": "Austin",
-        "num_jobs_to_compare":1
-    }
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Romania",
+    "state": null,
+    "city": "Bucharest",
+    "num_jobs_to_compare": 28
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "USA",
+    "state": "Texas",
+    "city": "Austin",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Australia",
+    "state": null,
+    "city": "Canberra",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Australia",
+    "state": null,
+    "city": "North Sydney",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Austria",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 2
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Austria",
+    "state": null,
+    "city": "Remote",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Austria",
+    "state": null,
+    "city": "Viena",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Brazil",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Sales",
+    "country": "Brazil",
+    "state": null,
+    "city": "Sao Paulo",
+    "num_jobs_to_compare": 1
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Quality Assurance",
+    "country": "Portugal",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 9
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Quality Assurance",
+    "country": "Portugal",
+    "state": null,
+    "city": "Lisbon",
+    "num_jobs_to_compare": 9
+  },
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Technical Writing",
+    "country": "United Kingdom",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 0
+  },
+
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Research & Development",
+    "country": "All countries",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 26
+  },
+
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Quality Assurance",
+    "country": "All countries",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 20
+  },
+
+  {
+    "url": "https://careers.veeam.com/vacancies",
+    "department": "Corporate Technology",
+    "country": "All countries",
+    "state": null,
+    "city": "All cities",
+    "num_jobs_to_compare": 12
+  }
 ]
